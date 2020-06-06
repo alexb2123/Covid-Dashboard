@@ -2,10 +2,11 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import Covid
+import plotly.graph_objects as go
 
 app = dash.Dash()
 
-fig = Covid.plot_sums()
+fig = go.Figure(Covid.plot_dashly(Covid.confirmed))
 
 colors = {
     'background': '#111111',
@@ -22,6 +23,11 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     ),
     html.Div(children='Dash: A Web application framework for Python.', style={
         'textAlign': 'center',
+        'color': colors['text']
+    }),
+
+    html.Div(children='Testing left side', style={
+        'textAlign': 'left',
         'color': colors['text']
     }),
 

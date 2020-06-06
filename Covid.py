@@ -9,7 +9,7 @@ deaths = pd.read_csv('/Users/alexandrubordei/Downloads/time_series_covid19_death
 confirmed = pd.read_csv('/Users/alexandrubordei/Downloads/time_series_covid19_confirmed_global-2.csv')
 recovered = pd.read_csv('/Users/alexandrubordei/Downloads/time_series_covid19_recovered_global.csv')
 
-
+#total global conirmed, dead, and recovered
 def total_sum():
     confirmed_case = confirmed['5/13/20'].sum()
     death_count = deaths['5/16/20'].sum()
@@ -18,6 +18,8 @@ def total_sum():
     print('total deaths are: ' + str(death_count))
     print('total recovered cases are: ' + str(recovered_cases))
 
+
+#total sums by country using lambdas
 def total_sum_by_region():
     confirmed.set_index('Country/Region')
     data = confirmed.groupby('Country/Region')['5/13/20'].apply(lambda g: g.nlargest(20).sum())
@@ -34,6 +36,7 @@ def total_sum_by_region():
     data2 = data.sort_values(ascending=False)
     print(data2)
 
+#bilals method of creating a new df
 def country_totals(raw_df):
     #print(raw_df['Country/Region'].unique())
     #print(raw_df.columns)
@@ -50,34 +53,32 @@ def country_totals(raw_df):
 
     return new_df
 
-
+#plotting a plotly map
 def plot_dashly(confirmed):
-    new_df = country_totals(confirmed)
     #confirmed.set_index('Country/Region')
     #grouped = confirmed.groupby('Country/Region')['5/13/20', 'Long', 'Lat'].apply(lambda g: g.nlargest(20).sum())
     #deaths.set_index('Country/Region')
     #confirmed['text'] = confirmed['5/13/20']+deaths['5/16/20']
     confirmed['text'] = confirmed['5/13/20']
-    scale = 1000
+    scale = 600
     fig = go.Figure()
 
 
-    for country in range(len(new_df)):
+    for country in range(len(confirmed)):
         fig.add_trace(go.Scattergeo(
-            lon=new_df['Long'],
-            lat=new_df['Lat'],
-            text=new_df['Country'] + '<br>Confirmed ' + new_df['Confirmed'].astype(str),
+            lon=confirmed['Long'],
+            lat=confirmed['Lat'],
+            text=confirmed['Country/Region'] + '<br>Confirmed ' + confirmed['5/13/20'].astype(str),
             mode='markers',
             #+ new_df[],
             marker=dict(
-                size=new_df['Confirmed'].astype(float)/scale,
+                size=confirmed['5/13/20'].astype(float)/scale,
                 color='crimson',
                 line_color='rgb(40,40,40)',
                 line_width=0.5,
                 sizemode='area',
             ),
-            #name=new_df['Country']
-            #name='test'
+            name=''
         ))
 
         fig.update_layout(
@@ -89,18 +90,23 @@ def plot_dashly(confirmed):
 
             )
         )
-    fig.show()
+    return fig
+    #fig.show()
 
+
+#pandas plot confirmed
 def plot_sums():
     index_confirmed = confirmed.set_index('Country/Region')
     confirmed_date_time = index_confirmed.iloc[:, 3:]
     summed_values = confirmed_date_time.sum(skipna=True)
     #print(summed_values)
-    #summed_values.plot.line()
+    summed_values.plot.line()
     #dash_graph = summed_values
-    #plt.show()
+    plt.show()
     #return dash_graph
 
+
+#bad plotly map
 def plot_map():
     index_confirmed = confirmed.set_index('Country/Region')
     confirmed_date_time = index_confirmed.iloc[:, 3:]
