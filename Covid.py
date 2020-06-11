@@ -82,7 +82,7 @@ def plot_dashly(confirmed):
         ))
 
         fig.update_layout(
-            title_text='Cummulative Confirmed Cases',
+            title_text='',
             showlegend=False,
             geo=dict(
                 scope='world',
