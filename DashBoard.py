@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 app = dash.Dash()
 
-fig = go.Figure(Covid.plot_dashly(Covid.confirmed))
+fig = go.Figure(Covid.plot_bubble_map(Covid.confirmed, Covid.deaths, Covid.recovered))
 
 colors = {
     'background': '#FFFFFF',
@@ -27,7 +27,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
 
     #header
     html.H1(
-        children='Hello Dash',
+        children='Global Coronavirus Incidence',
         style={
             'textAlign': 'center',
             'color': colors['text']
@@ -42,28 +42,55 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
 
     #map
     dcc.Graph(
-        id='Graph1',
+        id='bubble_map',
         figure=fig
     ),
 
     #dropdown
-    html.P([
-        html.Label("Choose your dataset", style={'padding-left': '100px'}),
-        dcc.Dropdown(id='opt', options=opts,
-                     )
-            ], style={'width': '500px',
-                      'fontSize': '20px',
-                      'padding-left': '100px',
-                      'display': 'inline-block'}
-)])
+    #html.P([
+    #    html.Label("Choose your dataset", style={'padding-left': '100px'}),
+    #    dcc.Dropdown(id='opt', options=opts,
+    #                 )
+    #        ], style={'width': '500px',
+    #                  'fontSize': '20px',
+    #                  'padding-left': '100px',
+    #                  'display': 'inline-block'}),
+    #
+    #
+#    #slider
+#    html.P([
+#        html.Label('Dates'),
+#        dcc.RangeSlider(id('slider',
+#                           ))
+#    ])
+
+])
+
+
+#-----------------------------------------------------------------
 
 #@app.callback(
-#    Output(component_id='', component_property='children'),
+#    Output(component_id='bubble_map', component_property='figure'),
 #    [Input(component_id='opt', component_property='value')]
 #)
-
-#def update_output_div(input_value):
-#    return 'You\'ve entered "{}"'.format(input_value)
 #
+#def update_graph(input_value):
+#    df_confirmed = Covid.confirmed
+#    df_recovered = Covid.recovered
+#    df_deaths = Covid.deaths
+#
+#    def check_input():
+#        if Input.component_property == confirmed_cases:
+#            dff = df_confirmed
+#        elif Input.component_property == recovered_cases:
+#            dff = df_recovered
+#        else:
+#            dff = df_deaths
+#
+#        return dff
+
+
+
+
 if __name__ == '__main__':
     app.run_server(debug=True)
